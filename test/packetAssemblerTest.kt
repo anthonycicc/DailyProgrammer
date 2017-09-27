@@ -1,7 +1,7 @@
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
-class packetAssemblerTest {
+class PacketAssemblerTest {
     @Test
     fun packetAssembler1(): Unit {
         val input = listOf<String>("6220    1   10  Because he's the hero Gotham deserves,",

@@ -1,6 +1,6 @@
 class PacketAssembler {
     companion object {
-        fun assemblePacket(inpList: List<String>): Unit {
+        fun assemblePacket(inpList: List<String>): List<String> {
             val packetList = mutableListOf<Packet>()
 
             for (i in inpList) {
@@ -18,10 +18,14 @@ class PacketAssembler {
             )
 
             packetList.forEach { println(it) }
+
+            val returnList = mutableListOf<String>()
+            packetList.forEach { returnList.add(it.toString()) }
+            return returnList
         }
     }
 
-    data class Packet(val messageID: Int, val packetID: Int, val totalPackets: Int, val message: String) {
+    data class Packet(val messageID: Int, val packetID: Int, private val totalPackets: Int, private val message: String) {
         override fun toString(): String {
             return "$messageID  $packetID  $totalPackets  $message"
         }
