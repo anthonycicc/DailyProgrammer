@@ -1,0 +1,10 @@
+Problem 1
+SELECT t.* FROM Iowa_Liquor_Sales t ORDER BY t.BottlesSold DESC;
+
+Problem 2
+
+Problem 3
+
+Problem 4
+
+Problem 5
