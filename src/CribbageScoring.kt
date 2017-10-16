@@ -1,13 +1,10 @@
 data class Card(val value: Value, val suit: Suit) {
-    val numericValue: Int
-
-    init {
-        numericValue = if (value.ordinal + 1 > 10) {
-            10
-        } else {
-            value.ordinal + 1
-        }
+    val numericValue: Int = if (value.ordinal + 1 > 10) {
+        10
+    } else {
+        value.ordinal + 1
     }
+
 }
 
 enum class Value {
@@ -31,7 +28,7 @@ class CribbageScoring(args: Array<String>) {
         var score = 0
         println("CalcToFifteen = ${cardList.calcAddToFifteen(lastCard)}")
         score += cardList.calcAddToFifteen(lastCard)
-        println("Calcruns = ${cardList.calcRuns(lastCard)}")
+        println("CalcRuns = ${cardList.calcRuns(lastCard)}")
         score += cardList.calcRuns(lastCard)
         println("CalcPairs = ${cardList.calcPairs(lastCard)}")
         score += cardList.calcPairs(lastCard)
@@ -84,12 +81,12 @@ fun List<Card>.calcPairs(lastCard: Card): Int {
     val numberList: List<Int> = this.fold(mutableListOf(), { acc: MutableList<Int>, card: Card -> acc.add(card.numericValue); acc }).plus(lastCard.numericValue)
     var score = 0
     numberList.forEach { testNum ->
-        when (numberList.count { testNum == it }) {
-            1 -> score += 0
-            2 -> score += 2
-            3 -> score += 6
-            4 -> score += 12
-            else -> throw Exception("Mawp")
+        score += when (numberList.count { testNum == it }) {
+            1 -> 0
+            2 -> 2
+            3 -> 6
+            4 -> 12
+            else -> throw Exception("This is impossible")
         }
     }
     return score
@@ -98,11 +95,11 @@ fun List<Card>.calcPairs(lastCard: Card): Int {
 fun List<Card>.calcFlushes(lastCard: Card): Int {
     val suitList: List<Suit> = this.fold(kotlin.collections.mutableListOf(), { acc, card -> acc.add(card.suit); acc })
     val suitListPlusLast = suitList.plus(lastCard.suit)
-    if (suitListPlusLast.all { it == suitListPlusLast.first() }) {
-        return 5
-    } else if (suitList.all { it == suitList.first() }) {
-        return 4
-    } else return 0
+    return when {
+        suitListPlusLast.all { it == suitListPlusLast.first() } -> 5
+        suitList.all { it == suitList.first() } -> 4
+        else -> 0
+    }
 }
 
 fun List<Card>.calcNobs(lastCard: Card): Int {
