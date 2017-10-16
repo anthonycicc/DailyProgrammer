@@ -2,8 +2,6 @@ import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 class MaxPeaksTest {
-
-
     @Test
     fun maxPeaks1(): Unit {
         val input = listOf<Int>(1, 2, 2, 5, 9, 5, 4, 4, 1, 6)
