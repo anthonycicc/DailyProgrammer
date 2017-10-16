@@ -2,7 +2,11 @@ data class Card(val value: Value, val suit: Suit) {
     val numericValue: Int
 
     init {
-        numericValue = value.ordinal + 1
+        numericValue = if (value.ordinal + 1 > 10) {
+            10
+        } else {
+            value.ordinal + 1
+        }
     }
 }
 
@@ -72,15 +76,33 @@ fun List<Card>.calcAddToFifteen(lastCard: Card): Int {
 }
 
 fun List<Card>.calcRuns(lastCard: Card): Int {
-    return 3
+    val numberList: List<Int> = this.fold(mutableListOf(), { acc: MutableList<Int>, card: Card -> acc.add(card.numericValue); acc }).plus(lastCard.numericValue)
+    return 3 * this.count { number -> numberList.contains(number.numericValue + 1) && numberList.contains(number.numericValue + 2) }
 }
 
 fun List<Card>.calcPairs(lastCard: Card): Int {
-    return 0
+    val numberList: List<Int> = this.fold(mutableListOf(), { acc: MutableList<Int>, card: Card -> acc.add(card.numericValue); acc }).plus(lastCard.numericValue)
+    var score = 0
+    numberList.forEach { testNum ->
+        when (numberList.count { testNum == it }) {
+            1 -> score += 0
+            2 -> score += 2
+            3 -> score += 6
+            4 -> score += 12
+            else -> throw Exception("Mawp")
+        }
+    }
+    return score
 }
 
 fun List<Card>.calcFlushes(lastCard: Card): Int {
-    return 0
+    val suitList: List<Suit> = this.fold(kotlin.collections.mutableListOf(), { acc, card -> acc.add(card.suit); acc })
+    val suitListPlusLast = suitList.plus(lastCard.suit)
+    if (suitListPlusLast.all { it == suitListPlusLast.first() }) {
+        return 5
+    } else if (suitList.all { it == suitList.first() }) {
+        return 4
+    } else return 0
 }
 
 fun List<Card>.calcNobs(lastCard: Card): Int {
