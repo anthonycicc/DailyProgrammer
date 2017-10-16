@@ -72,6 +72,7 @@ fun List<Card>.calcAddToFifteen(lastCard: Card): Int {
     return 6
 }
 
+// TODO: This function is not fully defined
 fun List<Card>.calcRuns(lastCard: Card): Int {
     val numberList: List<Int> = this.fold(mutableListOf(), { acc: MutableList<Int>, card: Card -> acc.add(card.numericValue); acc }).plus(lastCard.numericValue)
     return 3 * this.count { number -> numberList.contains(number.numericValue + 1) && numberList.contains(number.numericValue + 2) }
