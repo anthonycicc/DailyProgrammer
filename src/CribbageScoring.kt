@@ -25,14 +25,15 @@ class CribbageScoring(args: Array<String>) {
     }
 
     fun score(): Int {
-        var score = 0
-        score += cardList.calcAddToFifteen(lastCard)
-        score += cardList.calcRuns(lastCard)
-        score += cardList.calcPairs(lastCard)
-        score += cardList.calcFlushes(lastCard)
-        score += cardList.calcNobs(lastCard)
-
-        return score
+        return with(cardList) {
+            var score = 0
+            score += calcAddToFifteen(lastCard)
+            score += calcRuns(lastCard)
+            score += calcPairs(lastCard)
+            score += calcFlushes(lastCard)
+            score += calcNobs(lastCard)
+            score
+        }
     }
 }
 
