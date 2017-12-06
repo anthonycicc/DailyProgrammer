@@ -25,3 +25,6 @@ Write a function that takes the name of a major scale and the solfège name of a
     note("C", "Mi") -> "E"
     note("D", "Mi") -> "F#"
     note("A#", "Fa") -> "D#"
+    
+# Source
+https://www.reddit.com/r/dailyprogrammer/comments/7hhyin/20171204_challenge_343_easy_major_scales/
