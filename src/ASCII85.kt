@@ -8,13 +8,15 @@ fun main(args: Array<String>) {
 }
 
 fun String.encodeASCII85(): String{
-    val binList = mutableListOf<String>()
-    for (i in this){
-        binList.add(Integer.toBinaryString(i.toInt()))
+    var l = Integer.valueOf(this.map { it -> Integer.toBinaryString(it.toInt()) }
+            .fold("", { acc, s -> acc.plus(s.padStart(8, '0')) }), 2)
+    val retList = mutableListOf<Int>()
+    while (l != 0) {
+        retList.add(l.rem(85))
+        l /= 85
     }
-    val l = binList.fold("", { acc, s -> acc.plus(s) })
 
-    return l.toInt(85).toString()
+    return retList.reversed().map { (it + 33).toChar() }.joinToString(separator = "")
 }
 
 fun String.decodeASCII85(): String{
