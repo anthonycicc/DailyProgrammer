@@ -1,31 +1,61 @@
 import java.math.BigInteger
 
-class ASCII85{
+class ASCII85 {
     companion object {
-        fun runTest(input: List<Pair<Char, String>>): List<String>{
+        fun runTest(input: List<Pair<Char, String>>): List<String> {
             return input.map { mapPair(it) }
         }
     }
 }
 
-fun main(args: Array<String>) {
-    val input = listOf(Pair('e', "sure"),
-            Pair('e', "Attack at dawn"),
-            Pair('d', "87 cURD_ *#TDfTZ)+T"),
-            Pair('d', "06/^V@;0 P 'E,ol0Ea`g%AT@"),
-            Pair('d', "7W3Ei+EM%2Eb-A%DIal2AThX&+F.O, EcW@3B5\\nF/hR"),
-            Pair('e', "Mom, send dollars!"),
-            Pair('d', "6#:?H$@-Q4EX`@b@<5ud@V'@oDJ'8tD[CQ-+T"))
-    for (i in input) {
-        when(i.first){
-            'e' -> println("${i.second} encoded is ${i.second.encodeASCII85()}")
-            'd' -> println("${i.second} decoded is ${i.second.decodeASCII85()}")
-        }
-    }
+fun encode(input: String): String {
+    val length = input.length
+    var g = 0
+    val inputs = (0 until length step 4).map { if (it + 4 < length) input.subSequence(it, it + 4) else input.subSequence(it, length) }
+    val s = inputs.map {
+        g = 4 - it.length
+        var n = it.foldIndexed(0) { index, acc, c -> acc + c.toByte() * Math.pow(256.0, 3.0 - index).toInt() }
+
+        generateSequence {
+            if (n != 0) {
+                val x = n % 85; n /= 85; x
+            } else {
+                null
+            }
+        }.toList().reversed().map { (it + 33).toChar() }.joinToString("")
+    }.joinToString("")
+
+    return s.substring(0, s.length - g)
 }
 
-fun mapPair(x: Pair<Char, String>): String{
-    return when (x.first){
+
+fun decode(input: String): String {
+    val length = input.length
+    val inputs = (0 until length step 5).map { if (it + 5 < length) input.subSequence(it, it + 5) else input.subSequence(it, length) }
+    var g = 0
+    val s = inputs.map {
+        g = 5 - it.length
+        val x = it.padEnd(5, 'u')
+        var n = x.mapIndexed { index, c -> (c.toByte() - 33) * Math.pow(85.0, 4.0 - index) }.sum().toInt()
+
+        generateSequence {
+            if (n != 0) {
+                val x = n % 256; n /= 256; x
+            } else {
+                null
+            }
+        }.toList().reversed().map { it.toChar() }.joinToString("")
+    }.joinToString("")
+
+    return s.substring(0, s.length - g)
+}
+
+fun main(args: Array<String>) {
+    print(encode("Attack at dawn"))
+}
+
+fun mapPair(x: Pair<Char, String>): String {
+    return when (x.first) {
         'e' -> x.second.encodeASCII85()
         'd' -> x.second.decodeASCII85()
         else -> throw RuntimeException("Invalid Input")
