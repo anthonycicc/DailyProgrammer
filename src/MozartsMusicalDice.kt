@@ -49,7 +49,7 @@ fun main(args: Array<String>) {
             .fold(initial = mutableMapOf<Int, MutableList<Note>>()) { acc, note -> acc.getOrPut(note.measure, defaultValue = { mutableListOf() }).add(note); acc }
 
     val newNoteList = choices.foldIndexed(initial = mutableListOf()) { newMeasure: Int, acc: MutableList<Note>, oldMeasure: Int ->
-        acc.addAll(oldNoteMap.getOrDefault(oldMeasure, defaultValue = listOf<Note>()).map { note -> note.toNewMeasure(newMeasure) }); acc
+        acc.addAll(oldNoteMap.getOrDefault(oldMeasure, defaultValue = mutableListOf<Note>()).map { note -> note.toNewMeasure(newMeasure) }); acc
     }
 
     newNoteList.forEach { println(it) }
